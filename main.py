@@ -1,8 +1,11 @@
-from selenium import webdriver
-from data import payload
+from this import d
+import time  # импорты библиотек
+import datetime
 import pyautogui as pag
 import schedule
-import time  # импорты библиотек
+from selenium import webdriver
+
+from data import payload
 
 URL = 'https://pegas.bsu.edu.ru/mod/bigbluebuttonbn/view.php?id=1136555'
 HEADERS = {
@@ -32,8 +35,8 @@ def auth(payload):  # аутентификация в пегасе
     return driver  # возвращаем веб-драйвер для передачи его в следущую функцию
 
 
-def connect(driver):  # получаем драйвер из функции auth
-    driver.get(URL)  # переходим по ссылке для подключения к конфе
+def connect(driver, url):  # получаем драйвер из функции auth
+    driver.get(url)  # переходим по ссылке для подключения к конфе
     btn = driver.find_element_by_css_selector(
         "input#join_button_input")  # ищем кропку подключения к конфе
     btn.click()  # кликаем по ней
@@ -51,12 +54,19 @@ def listen():
 
 
 def main():
-    # print(pag.size())
-    # функция выполняет аутентификацию и возвращает веб-драйвер
-    driver = auth(payload)
-    # полученный веб-драйвер передаем в функцию для подключения к конфе и возвращаем веб-драйвер
-    connect(driver)
-    listen()
+    pairs = ['https://pegas.bsu.edu.ru/mod/bigbluebuttonbn/view.php?id=1136555',
+             'https://pegas.bsu.edu.ru/mod/bigbluebuttonbn/view.php?id=1172547']
+    for url in pairs:
+        now = datetime.datetime.now()
+        # print(pag.size())
+        # функция выполняет аутентификацию и возвращает веб-драйвер
+        driver = auth(payload)
+        # полученный веб-драйвер передаем в функцию для подключения к конфе и возвращаем веб-драйвер
+        connect(driver, url=url)
+        listen()
+        driver.quit()
+        if now.strftime("%H:%M") != '14:00':
+            time.sleep(1500)
 
 
 if __name__ == '__main__':
