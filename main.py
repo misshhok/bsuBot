@@ -1,4 +1,3 @@
-from this import d
 import time  # импорты библиотек
 import datetime
 import pyautogui as pag
